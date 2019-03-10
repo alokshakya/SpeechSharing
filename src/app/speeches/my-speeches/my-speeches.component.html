@@ -1,7 +1,26 @@
-<p>
-  my-speeches works!
-  <button class="btn btn-primary" (click)="addMessage()">Add Message</button>
-</p>
-<div *ngIf="loading" class="spinner-border" role="status">
-  <span class="sr-only">Loading...</span>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4">
+      <ul>
+        <li *ngIf="loadingIds" class="spinner-border" role="status"><span class="sr-only">Loading...</span></li>
+        <li *ngFor="let id of mySpeechIds">Speech Id: {{id}}</li>
+        <li>Speech 2</li>
+        <li>Speech 3</li>
+        <li (click)="addMessage()">Add Speech</li>
+      </ul>
+    </div>
+    <div class="col-md-8">
+        <form>
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Speech Content</label>
+              <textarea *ngIf="!loading" class="form-control" id="exampleFormControlTextarea1" rows="14"></textarea>
+              <div *ngIf="loading" class="spinner-border text-center" role="status">
+                  <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+        </form>
+    </div>
+  </div>
+
 </div>

@@ -11,6 +11,7 @@ export class MySpeechesComponent implements OnInit {
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    this.getMySpeechIds();
   }
 
   speechData = {
@@ -30,6 +31,21 @@ export class MySpeechesComponent implements OnInit {
       this.loading=false;
       console.log('response in console ');
       console.log(res);
+    });
+  }
+  mySpeechIds:number[];
+
+  loadingIds:boolean=false;
+  getMySpeechIds(){
+    this.loadingIds=true;
+    this.dataService.getMySpeechesIds(1)
+    .subscribe( (res) => {
+      this.loadingIds=false;
+      this.mySpeechIds = res;
+    },
+    (err) => {
+      this.loadingIds=false;
+      //do error handling part
     })
   }
 

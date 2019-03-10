@@ -1,4 +1,4 @@
-<h1>
+<!-- <h1>
   Speech Home
 </h1>
 <button routerLink="/home">Home</button>
@@ -7,4 +7,36 @@
 <button routerLink="searchSpeeches">Search Speeches</button>
 
 
-<router-outlet></router-outlet>
+<router-outlet></router-outlet> -->
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" routerLink="/home">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="mySpeeches" routerLinkActive="active">My Speeches</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="newSpeech" routerLinkActive="active">Submit a new Speech</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="searchSpeeches" routerLinkActive="active">Search all Speeches</a>
+            </li>
+          </ul>
+          <!-- <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form> -->
+        </div>
+      </nav>
+  <div class="row">
+    <div class="col-md-12">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>
