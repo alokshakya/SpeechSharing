@@ -6,9 +6,10 @@ import { MySpeechesComponent } from './my-speeches/my-speeches.component';
 import { NewSpeechComponent } from './new-speech/new-speech.component';
 import { SearchSpeechesComponent } from './search-speeches/search-speeches.component';
 import { SpeechHomeComponent } from './speech-home/speech-home.component';
+import { SpeechContentComponent } from './speech-content/speech-content.component';
 
 @NgModule({
-  declarations: [MySpeechesComponent, NewSpeechComponent, SearchSpeechesComponent, SpeechHomeComponent],
+  declarations: [MySpeechesComponent, NewSpeechComponent, SearchSpeechesComponent, SpeechHomeComponent, SpeechContentComponent],
   imports: [
     CommonModule,
     SpeechesRoutingModule

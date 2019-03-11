@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-my-speeches',
@@ -9,17 +10,22 @@ import { DataService } from '../../services/data.service';
 export class MySpeechesComponent implements OnInit {
 
   constructor(private dataService: DataService) { }
+  private eventsSubject: Subject<void> = new Subject<void>();
 
+  emitEventToChild() {
+    this.eventsSubject.next();
+  }
+  speechIdClicked:number;
   ngOnInit() {
     this.getMySpeechIds();
   }
 
   speechData = {
-    id:2,
+    id:3,
     authorId:2,
     authorName:'Alok',
     keywords:['rally', 'election'],
-    text:'This is testing text speech 2',
+    text:'This is testing text speech 3',
     createdDate:"2019-03-10T08:38:22.410Z",
     updatedDate:"2019-03-11T08:39:10.823Z"
   };
@@ -42,11 +48,18 @@ export class MySpeechesComponent implements OnInit {
     .subscribe( (res) => {
       this.loadingIds=false;
       this.mySpeechIds = res;
+      this.speechIdClicked = this.mySpeechIds[0];
     },
     (err) => {
       this.loadingIds=false;
       //do error handling part
     })
+  }
+  updateSpeechId(id:number){
+    console.log('id '+id);
+    this.speechIdClicked = id;
+    console.log('this.SpeechIdClicked '+this.speechIdClicked);
+    this.eventsSubject.next();
   }
 
 }
