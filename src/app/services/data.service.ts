@@ -66,15 +66,13 @@ export class DataService {
     
     return of(this.speechesArray).pipe ( delay( 3000 ) );
   }
-  editSpeech(id:number,newText:string):Observable<Speech>{
+  editSpeech(speech:Speech):Observable<Speech>{
     this.speechesArray = JSON.parse(localStorage.getItem('speeches'));
     var updated:boolean = false;
     var ind=0;
     for(let i=0; i<this.speechesArray.length; i++){
-      if(this.speechesArray[i].id == id){
-        this.speechesArray[i].text = newText;
-        var dateObj = new Date();
-        this.speechesArray[i].updatedDate = dateObj.toISOString();
+      if(this.speechesArray[i].id == speech.id){
+        this.speechesArray[i] = speech;
         updated=true;
         ind=i;
       }
