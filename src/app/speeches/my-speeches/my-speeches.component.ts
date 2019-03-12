@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { Subject } from 'rxjs';
+import { Subject, ReplaySubject } from 'rxjs';
 import { Speech } from '../../shared/speechInterface';
-
+import { takeUntil } from 'rxjs/internal/operators';
 @Component({
   selector: 'app-my-speeches',
   templateUrl: './my-speeches.component.html',
@@ -12,7 +12,7 @@ export class MySpeechesComponent implements OnInit {
 
   constructor(private dataService: DataService) { }
   private eventsSubject: Subject<void> = new Subject<void>();
-
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   emitEventToChild() {
     this.eventsSubject.next();
   }
@@ -67,6 +67,27 @@ export class MySpeechesComponent implements OnInit {
     // console.log('speech from child ');
     // console.log(speechFromChild);
     this.speech = speechFromChild;
+  }
+  savingSpeech:boolean=false;
+  save(){
+    this.savingSpeech = true;
+    console.log('speech Content');
+    var dateObj = new Date();
+    this.speech.updatedDate = dateObj.toISOString();
+    console.log(this.speech);
+    this.dataService.editSpeech(this.speech).pipe(takeUntil(this.destroyed$))
+    .subscribe( (res) => {
+      this.savingSpeech = false;
+      this.speech = res;
+    },
+    (err) => {
+      //error handling part
+    })
+  }
+
+  ngOnDestroy(){
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }

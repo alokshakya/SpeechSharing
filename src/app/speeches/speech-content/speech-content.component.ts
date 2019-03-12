@@ -14,6 +14,7 @@ export class SpeechContentComponent implements OnInit {
 
   constructor(private fb: FormBuilder,private dataService: DataService) { }
   @Input('speechId') id: number;
+  @Input('disableControls') disableControlsCondition: boolean;
   @Input() events: Observable<void>;
   @Output() editedSpeech = new EventEmitter<Speech>();
   speechText:string='this is testing test in component ';
@@ -21,12 +22,26 @@ export class SpeechContentComponent implements OnInit {
   speech:Speech;
   loadingText:boolean=false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  dis:boolean=true;
+  addSpeechCondition:boolean=false;
   ngOnInit() {
     this.initSpeechForm();
     console.log('id of input '+this.id);
-    this.loadInitialSpeech();
-    //subscribe to id change in parent to fetch updated speech
-    this.loadSpeechOnIdChange();
+    if(this.id === undefined){
+      this.addSpeechCondition = true;
+      var dateObj = new Date();
+      this.speech = {id:1,authorId:2,authorName:`Alok Shakya`,keywords:[`keywords1`, `keyword2`],text:'Enter Input Text',createdDate:dateObj.toISOString(),updatedDate:dateObj.toISOString()};
+      console.log(this.speech);
+      console.log('-------------;;;;;')
+      this.setFormControlValues();
+      console.log(' add speech part executed');
+    }
+    else{
+      this.loadInitialSpeech();
+      //subscribe to id change in parent to fetch updated speech
+      this.loadSpeechOnIdChange();
+    }
+    
 
   }
 
@@ -49,7 +64,10 @@ export class SpeechContentComponent implements OnInit {
       this.speech.authorName = val.authorName;
       //send Speech To parent componet
       this.editedSpeech.emit(this.speech);
-    })
+    });
+    if(this.disableControlsCondition){
+      //this.speechForm.get('text').disable();
+    }
   }
 
   loadInitialSpeech(){
@@ -66,7 +84,7 @@ export class SpeechContentComponent implements OnInit {
 
   loadSpeechOnIdChange(){
     this.events.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-      
+
       this.loadingText = true;
       this.dataService.getSpeech(this.id).pipe(takeUntil(this.destroyed$)).subscribe( (res) => {
         this.loadingText = false;
@@ -80,7 +98,10 @@ export class SpeechContentComponent implements OnInit {
 
   setFormControlValues(){
     this.speechForm.controls['text'].setValue(this.speech.text);
-    this.speechForm.controls['keywords'].setValue(this.speech.keywords);
+    console.log(this.speech)
+    console.log('keywords '+this.speech.keywords);
+    console.log('authorName '+this.speech.authorName);
+    this.speechForm.controls['keywords'].setValue(this.speech.keywords.toString());
     this.speechForm.controls['authorName'].setValue(this.speech.authorName);
   }
 
@@ -89,21 +110,6 @@ export class SpeechContentComponent implements OnInit {
     this.destroyed$.complete();
   }
 
-  savingSpeech:boolean=false;
-  save(){
-    this.savingSpeech = true;
-    console.log('speech Content');
-    var dateObj = new Date();
-    this.speech.updatedDate = dateObj.toISOString();
-    console.log(this.speech);
-    this.dataService.editSpeech(this.speech).pipe(takeUntil(this.destroyed$))
-    .subscribe( (res) => {
-      this.savingSpeech = false;
-      this.speech = res;
-    },
-    (err) => {
-      //error handling part
-    })
-  }
+  
 
 }

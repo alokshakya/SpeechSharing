@@ -1,3 +1,15 @@
-<p>
-  new-speech works!
-</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-10 offset-md-1 col-sm-12">
+        <app-speech-content [disableControls]="false" (editedSpeech)="editedSpeech($event)"></app-speech-content>
+        <div class="row">
+          <div class="col-md-6 offset-md-3">
+            <button class="btn btn-primary"  (click)="addSpeech()">Add Speech</button>
+          </div>
+
+        </div>
+    </div>
+
+  </div>
+
+</div>

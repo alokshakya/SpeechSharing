@@ -1,40 +1,30 @@
-<form *ngIf="speech" [formGroup]="speechForm" novalidate>
+<form *ngIf="speech || addSpeechCondition" [formGroup]="speechForm" novalidate>
   <div class="form-group">
     <label for="exampleFormControlTextarea1">Speech Content</label>
-    <textarea *ngIf="!loading" class="form-control" formControlName="text" id="exampleFormControlTextarea1" rows="14"></textarea>
+    <textarea *ngIf="disableControlsCondition" class="form-control" [value]="speech?.text" rows="14" disabled></textarea>
+    <textarea *ngIf="!disableControlsCondition" class="form-control" formControlName="text" id="exampleFormControlTextarea1" rows="14"></textarea>
     <div *ngIf="loadingText" class="spinner-border text-center" role="status">
         <span class="sr-only">Loading...</span>
     </div>
   </div>
   <div class="row">
     <div class="col-md-4 form-group">
-        <input class="form-control" type="text" formControlName="authorName" placeholder="Author Name">
+        <input *ngIf="disableControlsCondition" class="form-control" type="text" name="author" [value]="speech?.authorName" placeholder="Author Name" disabled>
+        <input *ngIf="!disableControlsCondition"  class="form-control" type="text" formControlName="authorName" placeholder="Author Name">
     </div>
     <div class="col-md-4 form-group">
-        <input class="form-control" formControlName="keywords" type="text" placeholder="Keywords">
+        <input *ngIf="disableControlsCondition" class="form-control" [value]="speech?.keywords"  type="text" placeholder="Keywords" disabled>
+        <input *ngIf="!disableControlsCondition" class="form-control" formControlName="keywords" type="text" placeholder="Keywords">
     </div>
     <div class="col-md-4 form-group">
         <input class="form-control" [value]="speech?.createdDate | date" type="text" disabled>
     </div>
   </div>
-  <div class="row">
-      <div class="col-md-4 btnm">
-          <button type="button" class="btn btn-primary">Delete</button>
-      </div>
-      <div class="col-md-4 btnm">
-          <button type="button " class="btn btn-primary" (click)="save()">Save  </button>
-          <div *ngIf="savingSpeech" class="spinner-border text-center" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-      </div>
-      <div class="col-md-4 btnm">
-          <button type="button " class="btn btn-primary">Share </button>
-      </div>
-  </div>
+  
 </form>
 
 
-<form *ngIf="!speech">
+<!-- <form *ngIf="!speech">
     <div class="form-group">
       <label for="exampleFormControlTextarea1">Speech Content</label>
       <textarea *ngIf="!loading" class="form-control" id="exampleFormControlTextarea1" rows="14"></textarea>
@@ -53,16 +43,6 @@
           <input class="form-control" type="text">
       </div>
     </div>
-    <div class="row">
-        <div class="col-md-4 btnm">
-            <button type="button" class="btn btn-primary">Delete</button>
-        </div>
-        <div class="col-md-4 btnm">
-            <button type="button " class="btn btn-primary">Save  </button>
-        </div>
-        <div class="col-md-4 btnm">
-            <button type="button " class="btn btn-primary">Share </button>
-        </div>
-    </div>
-  </form>
+
+  </form> -->
 

@@ -22,10 +22,14 @@ var Speeches2:Speech[] = [
 export class DataService {
   speechesArray:Speech[];
   constructor() { }
-  getAllSpeeches(): Observable<Speech[]> {
+  getAllSpeeches(): Observable<number[]> {
     this.speechesArray = JSON.parse(localStorage.getItem('speeches'));
     // of operator returns array and pipe delay returns result after 3 sec to simulate http response
-    return of(this.speechesArray).pipe( delay(3000)); 
+    //return only ids of my speechs so use map
+    var ids = this.speechesArray.map( val => {
+      return val.id;
+    })
+    return of(ids).pipe( delay(3000)); 
   }
   getMySpeechesIds(id:number): Observable<number[]> {
     this.speechesArray = JSON.parse(localStorage.getItem('speeches'));
