@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Subject } from 'rxjs';
+import { Speech } from '../../shared/speechInterface';
 
 @Component({
   selector: 'app-my-speeches',
@@ -60,6 +61,12 @@ export class MySpeechesComponent implements OnInit {
     this.speechIdClicked = id;
     console.log('this.SpeechIdClicked '+this.speechIdClicked);
     this.eventsSubject.next();
+  }
+  speech:Speech;
+  editedSpeech(speechFromChild:Speech){
+    // console.log('speech from child ');
+    // console.log(speechFromChild);
+    this.speech = speechFromChild;
   }
 
 }
