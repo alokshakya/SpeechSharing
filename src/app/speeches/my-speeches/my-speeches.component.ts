@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/internal/operators';
 export class MySpeechesComponent implements OnInit {
 
   constructor(private dataService: DataService) { }
-  private eventsSubject: Subject<void> = new Subject<void>();
+  private eventsSubject: Subject<number> = new Subject<number>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   emitEventToChild() {
     this.eventsSubject.next();
@@ -21,25 +21,6 @@ export class MySpeechesComponent implements OnInit {
     this.getMySpeechIds();
   }
 
-  speechData = {
-    id:3,
-    authorId:2,
-    authorName:'Alok',
-    keywords:['rally', 'election'],
-    text:'This is testing text speech 3',
-    createdDate:"2019-03-10T08:38:22.410Z",
-    updatedDate:"2019-03-11T08:39:10.823Z"
-  };
-  loading:boolean=false;
-  addMessage(){
-    this.loading=true;
-    this.dataService.addSpeech(this.speechData)
-    .subscribe( (res) => {
-      this.loading=false;
-      console.log('response in console ');
-      console.log(res);
-    });
-  }
   mySpeechIds:number[];
 
   loadingIds:boolean=false;
@@ -60,7 +41,7 @@ export class MySpeechesComponent implements OnInit {
     console.log('id '+id);
     this.speechIdClicked = id;
     console.log('this.SpeechIdClicked '+this.speechIdClicked);
-    this.eventsSubject.next();
+    this.eventsSubject.next(id);
   }
   speech:Speech;
   editedSpeech(speechFromChild:Speech){
