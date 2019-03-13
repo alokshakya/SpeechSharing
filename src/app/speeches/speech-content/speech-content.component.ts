@@ -102,6 +102,7 @@ export class SpeechContentComponent implements OnInit {
         this.loadingText = false;
         this.speech = res;
         this.setFormControlValues();
+        console.log('received speech with id '+this.id);
         console.log(this.speech);
         //send Speech To parent componet
         this.editedSpeech.emit(this.speech);
