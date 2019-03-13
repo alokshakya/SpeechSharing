@@ -48,19 +48,20 @@ export class NewSpeechComponent implements OnInit {
     // console.log(speechFromChild);
     this.speech = speechFromChild;
   }
-  savingSpeech:boolean=false;
-  save(){
-    this.savingSpeech = true;
+  addingSpeech:boolean=false;
+  add(){
+    this.addingSpeech = true;
     console.log('speech Content');
     var dateObj = new Date();
     this.speech.updatedDate = dateObj.toISOString();
     console.log(this.speech);
-    this.dataService.editSpeech(this.speech).pipe(takeUntil(this.destroyed$))
+    this.dataService.addSpeech(this.speech).pipe(takeUntil(this.destroyed$))
     .subscribe( (res) => {
-      this.savingSpeech = false;
+      this.addingSpeech = false;
       this.speech = res;
     },
     (err) => {
+      this.addingSpeech = false;
       //error handling part
     })
   }
@@ -73,6 +74,9 @@ export class NewSpeechComponent implements OnInit {
   addSpeech(){
     console.log('speech to be added ');
     console.log(this.speech);
+  }
+  remove(){
+    localStorage.removeItem('speeches');
   }
 
 

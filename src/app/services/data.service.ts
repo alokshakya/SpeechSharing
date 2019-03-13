@@ -48,12 +48,15 @@ export class DataService {
     this.speechesArray = JSON.parse(localStorage.getItem('speeches'));
     //use filter to filter speeches with particular speech id
     var Speech= this.speechesArray.filter(val => {
+      console.log('id '+id +' val.id '+val.id);
       return val.id = id;
     });
     // return 0 index element of filtered array
+    console.log('returning speech ');
+    console.log(Speech[0]);
     return of(Speech[0]).pipe( delay(3000));
   }
-  addSpeech(data:Speech): Observable<Speech[]> {
+  addSpeech(data:Speech): Observable<Speech> {
     // TODO: send the message _after_ fetching the heroes
     //this.messageService.add('HeroService: fetched heroes');
     if(localStorage.getItem('speeches') == null){
@@ -68,7 +71,7 @@ export class DataService {
       localStorage.setItem('speeches', JSON.stringify(this.speechesArray));
     }
     
-    return of(this.speechesArray).pipe ( delay( 3000 ) );
+    return of(data).pipe ( delay( 3000 ) );
   }
   editSpeech(speech:Speech):Observable<Speech>{
     this.speechesArray = JSON.parse(localStorage.getItem('speeches'));
@@ -88,5 +91,12 @@ export class DataService {
     else{
       //not found and not updated error
     }
+  }
+
+  getNewSpeechId():number{
+    var ar = JSON.parse(localStorage.getItem('speeches'));
+    // return length + 5*(length -3)*11*31%17 so that unique id is maintained
+    var le = ar.length;
+    return (le + ( (le)*5*11*31)%17);
   }
 }

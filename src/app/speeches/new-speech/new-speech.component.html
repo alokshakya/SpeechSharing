@@ -3,9 +3,13 @@
     <div class="col-md-10 offset-md-1 col-sm-12">
         <app-speech-content [disableControls]="false" (editedSpeech)="editedSpeech($event)"></app-speech-content>
         <div class="row">
-          <div class="col-md-6 offset-md-3">
-            <button class="btn btn-primary"  (click)="addSpeech()">Add Speech</button>
+          <div class="col-md-3 offset-md-3">
+            <button class="btn btn-primary"  (click)="add()">Add Speech</button>
           </div>
+          <div class="col-md-3 offset-md-3">
+            <button class="btn btn-primary"  (click)="remove()">Remove All</button>
+          </div>
+          <div *ngIf="addingSpeech" class="spinner-border text-center" role="status"><span class="sr-only">Loading...</span>
 
         </div>
     </div>
