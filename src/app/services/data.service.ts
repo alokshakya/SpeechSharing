@@ -5,17 +5,6 @@ import { Speeches } from '../shared/speeches';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/internal/operators';
 
-var Speeches2:Speech[] = [
-  {
-      id:1,
-      authorId:2,
-      authorName:'Alok',
-      keywords:['rally', 'election'],
-      text:'This is testing text speech',
-      createdDate:"2019-03-09T08:38:22.410Z",
-      updatedDate:"2019-03-09T08:39:10.823Z"
-  }
-];
 @Injectable({
   providedIn: 'root'
 })
@@ -49,29 +38,12 @@ export class DataService {
   }
   getSpeech(id:number):Observable<Speech>{
     var speechesArray = JSON.parse(localStorage.getItem('speeches'));
-    // console.log('getSpeech by id ');
-    // console.log(speechesArray);
-    // console.log('local storage');
-    // console.log(localStorage.getItem('speeches'));
-    // console.log('JSON parse local storage');
-    // console.log(JSON.parse(localStorage.getItem('speeches')));
     for( let i=0; i<speechesArray.length; i++){
       if(speechesArray[i].id == id){
-        // console.log('sending speech with id '+id);
-        // console.log(speechesArray[i]);
         return of(speechesArray[i]).pipe( delay(3000));
       }
     }
     alert('not found speech with id '+id);
-    // //use filter to filter speeches with particular speech id
-    // var Speech= this.speechesArray.filter(val => {
-    //   console.log('id '+id +' val.id '+val.id);
-    //   return val.id = id;
-    // });
-    // // return 0 index element of filtered array
-    // console.log('returning speech ');
-    // console.log(Speech[0]);
-    // return of(Speech[0]).pipe( delay(3000));
   }
   addSpeech(data:Speech): Observable<Speech> {
     // TODO: send the message _after_ fetching the heroes
@@ -105,15 +77,33 @@ export class DataService {
     return;
   }
 
+  deleteSpeech(id:number):Observable<number[]>{
+    this.speechesArray = JSON.parse(localStorage.getItem('speeches'));
+    for(let i=0; i<this.speechesArray.length; i++){
+      if(this.speechesArray[i].id == id){
+        console.log('id matched '+this.speechesArray[i].id + ' param id '+id);
+        this.speechesArray.splice(i,1);
+        localStorage.setItem('speeches', JSON.stringify(this.speechesArray));
+        console.log('speeches from localstorage '+localStorage.getItem('speeches'));
+        var ids = this.speechesArray.map( (val) => {
+          return val.id;
+        })
+        return of(ids).pipe ( delay( 3000 ) );
+      }
+    }
+    alert( 'speech not found');
+    return;
+  }
+
   getNewSpeechId():number{
     var ar = JSON.parse(localStorage.getItem('speeches'));
-    // return length + 5*(length -3)*11*31%17 so that unique id is maintained
     if(ar == null){
       return 1;
     }
-    var le = ar.length;
-    console.log('ar length '+le);
-    console.log('cal val '+(le + ( (le)*5*11*31)%17))
-    return (le + ( (le)*5*11*31)%17);
+    var min=2;
+    var max=500000;
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;  
   }
 }
