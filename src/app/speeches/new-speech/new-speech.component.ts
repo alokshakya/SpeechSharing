@@ -12,6 +12,7 @@ export class NewSpeechComponent implements OnInit {
 
   constructor(private dataService: DataService) { }
   private eventsSubject: Subject<void> = new Subject<void>();
+  private loadingEventSubject: Subject<boolean> = new Subject<boolean>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   emitEventToChild() {
     this.eventsSubject.next();
@@ -51,6 +52,7 @@ export class NewSpeechComponent implements OnInit {
   addingSpeech:boolean=false;
   add(){
     this.addingSpeech = true;
+    this.loadingEventSubject.next(true);
     console.log('speech Content');
     var dateObj = new Date();
     this.speech.updatedDate = dateObj.toISOString();
@@ -58,10 +60,12 @@ export class NewSpeechComponent implements OnInit {
     this.dataService.addSpeech(this.speech).pipe(takeUntil(this.destroyed$))
     .subscribe( (res) => {
       this.addingSpeech = false;
+      this.loadingEventSubject.next(false);
       this.speech = res;
     },
     (err) => {
       this.addingSpeech = false;
+      this.loadingEventSubject.next(false);
       //error handling part
     })
   }

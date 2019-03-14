@@ -40,15 +40,11 @@ export class MySpeechesComponent implements OnInit {
     })
   }
   updateSpeechId(id:number){
-    console.log('id '+id);
     this.speechIdClicked = id;
-    console.log('this.SpeechIdClicked '+this.speechIdClicked);
     this.eventsSubject.next(id);
   }
   speech:Speech;
   editedSpeech(speechFromChild:Speech){
-    // console.log('speech from child ');
-    // console.log(speechFromChild);
     this.speech = speechFromChild;
   }
   savingSpeech:boolean=false;
@@ -64,6 +60,22 @@ export class MySpeechesComponent implements OnInit {
       this.savingSpeech = false;
       this.loadingEventSubject.next(false);
       this.speech = res;
+    },
+    (err) => {
+      this.loadingEventSubject.next(false);
+      //error handling part
+    })
+  }
+
+  delete(){
+    this.loadingEventSubject.next(true);
+    this.dataService.deleteSpeech(this.speech.id).pipe(takeUntil(this.destroyed$))
+    .subscribe( (res) => {
+      this.savingSpeech = false;
+      this.loadingEventSubject.next(false);
+      this.mySpeechIds = res;
+      this.speechIdClicked = this.mySpeechIds[0];
+      this.updateSpeechId(this.speechIdClicked);
     },
     (err) => {
       this.loadingEventSubject.next(false);

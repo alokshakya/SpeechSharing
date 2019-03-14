@@ -3,21 +3,18 @@
   <div class="row">
     <div class="col-md-3">
       <ul>
-        <li *ngIf="loadingIds" class="spinner-border" role="status"><span class="sr-only">Loading...</span></li>
         <li *ngFor="let id of mySpeechIds" (click)="updateSpeechId(id)">Speech {{id}}</li>  
       </ul>
+      <div *ngIf="loadingIds" class="loader"></div>
     </div>
     <div class="col-md-8">
       <app-speech-content [disableControls]="false" [parent]="'mySpeeches'" [speechId]="speechIdClicked" [events]="eventsSubject.asObservable()" [loadingEvent]="loadingEventSubject.asObservable()" (editedSpeech)="editedSpeech($event)"></app-speech-content>
       <div class="row">
           <div class="col-md-4 btnm">
-              <button type="button" class="btn btn-primary">Delete</button>
+              <button type="button" class="btn btn-primary" (click)="delete()">Delete</button>
           </div>
           <div class="col-md-4 btnm">
               <button type="button " class="btn btn-primary" (click)="save()">Save  </button>
-              <div *ngIf="savingSpeech" class="spinner-border text-center" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
           </div>
           <div class="col-md-4 btnm">
               <button type="button " class="btn btn-primary">Share </button>
