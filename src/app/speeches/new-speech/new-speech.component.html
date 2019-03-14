@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-10 offset-md-1 col-sm-12">
-        <app-speech-content [disableControls]="false" (editedSpeech)="editedSpeech($event)"></app-speech-content>
+        <app-speech-content [disableControls]="false" [parent]="'addSpeech'" (editedSpeech)="editedSpeech($event)"></app-speech-content>
         <div class="row">
           <div class="col-md-3 offset-md-3">
             <button class="btn btn-primary"  (click)="add()">Add Speech</button>

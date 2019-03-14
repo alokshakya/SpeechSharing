@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/internal/operators';
 export class SearchSpeechesComponent implements OnInit {
 
   constructor(private dataService: DataService) { }
-  private eventsSubject: Subject<void> = new Subject<void>();
+  private eventsSubject: Subject<number> = new Subject<number>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   emitEventToChild() {
     this.eventsSubject.next();
@@ -31,6 +31,7 @@ export class SearchSpeechesComponent implements OnInit {
       this.loadingIds=false;
       this.allSpeechIds = res;
       this.speechIdClicked = this.allSpeechIds[0];
+      this.updateSpeechId(this.speechIdClicked);
     },
     (err) => {
       this.loadingIds=false;
@@ -41,7 +42,7 @@ export class SearchSpeechesComponent implements OnInit {
     console.log('id '+id);
     this.speechIdClicked = id;
     console.log('this.SpeechIdClicked '+this.speechIdClicked);
-    this.eventsSubject.next();
+    this.eventsSubject.next(this.speechIdClicked);
   }
   speech:Speech;
   editedSpeech(speechFromChild:Speech){
