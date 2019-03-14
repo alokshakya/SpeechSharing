@@ -14,8 +14,10 @@ export class SpeechContentComponent implements OnInit {
 
   constructor(private fb: FormBuilder,private dataService: DataService) { }
   @Input('speechId') id: number;
+  @Input('parent') parentComponent: string;
   @Input('disableControls') disableControlsCondition: boolean;
   @Input() events: Observable<number>;
+  @Input() loadingEvent: Observable<boolean>;
   @Output() editedSpeech = new EventEmitter<Speech>();
   speechText:string='this is testing test in component ';
   eventsSubscription:any;
@@ -26,8 +28,16 @@ export class SpeechContentComponent implements OnInit {
   addSpeechCondition:boolean=false;
   ngOnInit() {
     this.initSpeechForm();
-    console.log('id of input in speech content'+this.id);
-    if(this.id === undefined){
+    this.subscribeToLoadingEvent(); //this will be used to display loader in child component
+    //based on events in parent component
+
+    console.log('parent '+this.parentComponent );
+    if(this.parentComponent == 'mySpeeches'){
+      //subscribe to id change only
+      this.loadSpeechOnIdChange();
+    }
+    else if(this.parentComponent == 'addSpeech'){
+      //create new specch object and perform tasks
       this.addSpeechCondition = true;
       var dateObj = new Date();
       this.speech = {
@@ -43,11 +53,11 @@ export class SpeechContentComponent implements OnInit {
       this.setFormControlValues();
       console.log(' add speech part executed');
     }
-    else{
-      this.loadInitialSpeech();
-      //subscribe to id change in parent to fetch updated speech
+    else {
+      //subscribe to id change only
       this.loadSpeechOnIdChange();
     }
+    
     
 
   }
@@ -77,19 +87,6 @@ export class SpeechContentComponent implements OnInit {
     }
   }
 
-  loadInitialSpeech(){
-    console.log('id of input in speech content'+this.id);
-    this.loadingText = true;
-    this.dataService.getSpeech(this.id).pipe(takeUntil(this.destroyed$)).subscribe( (res) => {
-      this.loadingText = false;
-      this.speech = res;
-      this.setFormControlValues();
-      //send Speech To parent componet
-      this.editedSpeech.emit(this.speech);
-    });
-
-  }
-
   loadSpeechOnIdChange(){
     console.log('id of input in speech content'+this.id);
     this.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
@@ -108,6 +105,13 @@ export class SpeechContentComponent implements OnInit {
         this.editedSpeech.emit(this.speech);
       });
     });
+  }
+
+  loadingCondition:boolean=false;
+  subscribeToLoadingEvent(){
+    this.loadingEvent.pipe(takeUntil(this.destroyed$)).subscribe( (event) => {
+      this.loadingCondition = event;
+    })
   }
 
   setFormControlValues(){

@@ -1,11 +1,10 @@
-<form *ngIf="speech || addSpeechCondition" [formGroup]="speechForm" novalidate>
+<form [formGroup]="speechForm" novalidate>
   <div class="form-group">
     <label for="exampleFormControlTextarea1">Speech Content</label>
     <textarea *ngIf="disableControlsCondition" class="form-control" [value]="speech?.text" rows="14" disabled></textarea>
     <textarea *ngIf="!disableControlsCondition" class="form-control" formControlName="text" id="exampleFormControlTextarea1" rows="14"></textarea>
-    <div *ngIf="loadingText" class="spinner-border text-center" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>
+    <div *ngIf="loadingText || loadingCondition" class="loader"></div>
+    <div *ngIf="parentComponent !='addSpeech' && !id" class="loader"></div>
   </div>
   <div class="row">
     <div class="col-md-4 form-group">
@@ -23,26 +22,5 @@
   
 </form>
 
-
-<!-- <form *ngIf="!speech">
-    <div class="form-group">
-      <label for="exampleFormControlTextarea1">Speech Content</label>
-      <textarea *ngIf="!loading" class="form-control" id="exampleFormControlTextarea1" rows="14"></textarea>
-      <div *ngIf="loadingText" class="spinner-border text-center" role="status">
-          <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4 form-group">
-          <input class="form-control" type="text" placeholder="Author">
-      </div>
-      <div class="col-md-4 form-group">
-          <input class="form-control" type="text" placeholder="Keywords">
-      </div>
-      <div class="col-md-4 form-group">
-          <input class="form-control" type="text">
-      </div>
-    </div>
-
-  </form> -->
+<!-- <div class="loader"></div> -->
 

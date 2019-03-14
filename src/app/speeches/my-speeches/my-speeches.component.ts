@@ -12,6 +12,7 @@ export class MySpeechesComponent implements OnInit {
 
   constructor(private dataService: DataService) { }
   private eventsSubject: Subject<number> = new Subject<number>();
+  private loadingEventSubject: Subject<boolean> = new Subject<boolean>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   emitEventToChild() {
     this.eventsSubject.next();
@@ -31,6 +32,7 @@ export class MySpeechesComponent implements OnInit {
       this.loadingIds=false;
       this.mySpeechIds = res;
       this.speechIdClicked = this.mySpeechIds[0];
+      this.updateSpeechId(this.speechIdClicked);
     },
     (err) => {
       this.loadingIds=false;
@@ -52,6 +54,7 @@ export class MySpeechesComponent implements OnInit {
   savingSpeech:boolean=false;
   save(){
     this.savingSpeech = true;
+    this.loadingEventSubject.next(true);
     console.log('speech Content');
     var dateObj = new Date();
     this.speech.updatedDate = dateObj.toISOString();
@@ -59,9 +62,11 @@ export class MySpeechesComponent implements OnInit {
     this.dataService.editSpeech(this.speech).pipe(takeUntil(this.destroyed$))
     .subscribe( (res) => {
       this.savingSpeech = false;
+      this.loadingEventSubject.next(false);
       this.speech = res;
     },
     (err) => {
+      this.loadingEventSubject.next(false);
       //error handling part
     })
   }
