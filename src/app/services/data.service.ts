@@ -94,6 +94,36 @@ export class DataService {
     alert( 'speech not found');
     return;
   }
+  searchByAuthor(name:string):Observable<number[]>{
+    var Ids = [];
+    this.speechesArray = JSON.parse(localStorage.getItem('speeches'));
+    for(let i=0; i<this.speechesArray.length; i++){
+      if(this.speechesArray[i].authorName == name){
+        Ids.push(this.speechesArray[i].id);  
+      }
+    }
+    return of(Ids).pipe ( delay( 3000 ) );
+  }
+  searchByKeywords(keywords:string[]):Observable<number[]>{
+    var Ids = [];
+    console.log('search by keywords array in service');
+    console.log(keywords);
+    this.speechesArray = JSON.parse(localStorage.getItem('speeches'));
+    for(let i=0; i<this.speechesArray.length; i++){
+      console.log('keywords of speechArray ');
+      console.log(this.speechesArray[i].keywords);
+      for(let j=0;j<this.speechesArray[i].keywords.length;j++){
+        for(let k=0; k<keywords.length;k++){
+          
+          if(keywords[k] == this.speechesArray[i].keywords[j]){
+            console.log('match for keywords ');
+            Ids.push(this.speechesArray[i].id);
+          }
+        }
+      }  
+    }
+    return of(Ids).pipe ( delay( 3000 ) );
+  }
 
   getNewSpeechId():number{
     var ar = JSON.parse(localStorage.getItem('speeches'));

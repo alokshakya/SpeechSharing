@@ -72,8 +72,58 @@ export class SearchSpeechesComponent implements OnInit {
   }
 
   searchByCondition:string;
+  authorName:string;
+  keywords:string;
+  keywordsArray:string[];
   searchBy(condition:string){
     this.searchByCondition = condition;
+  }
+
+  search(){
+    if(this.searchByCondition == 'author'){
+      console.log('keywords '+ this.authorName);
+      this.dataService.searchByAuthor(this.authorName).pipe(takeUntil(this.destroyed$))
+      .subscribe( (res) => {
+        this.loadingIds=false;
+        if(res == []){
+          alert('no speech found for author '+this.authorName);
+        }
+        else{
+          this.allSpeechIds = res;
+          this.speechIdClicked = this.allSpeechIds[0];
+          this.updateSpeechId(this.speechIdClicked);
+        }
+        
+      },
+      (err) => {
+        //err
+        this.loadingIds = false;
+      })
+    }
+    if(this.searchByCondition == 'keywords'){
+      this.keywordsArray = this.keywords.split(',');
+      for(let i=0;i<this.keywordsArray.length;i++){
+        console.log('keywords '+ this.keywordsArray[i]);
+      }
+      this.dataService.searchByKeywords(this.keywordsArray).pipe(takeUntil(this.destroyed$))
+      .subscribe( (res) => {
+        this.loadingIds=false;
+        if(res == []){
+          alert('no speech found for keywords '+this.keywords);
+        }
+        else{
+          this.allSpeechIds = res;
+          this.speechIdClicked = this.allSpeechIds[0];
+          this.updateSpeechId(this.speechIdClicked);
+        }
+        
+      },
+      (err) => {
+        //err
+        this.loadingIds = false;
+      })
+    }
+
   }
 
   ngOnDestroy(){

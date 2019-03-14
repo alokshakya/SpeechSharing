@@ -54,6 +54,11 @@ export class MySpeechesComponent implements OnInit {
     console.log('speech Content');
     var dateObj = new Date();
     this.speech.updatedDate = dateObj.toISOString();
+    var a = this.speech.keywords;
+    var b = a.toString();
+    this.speech.keywords = b.split(',');
+    console.log('speech keywords ');
+    console.log(this.speech.keywords);
     console.log(this.speech);
     this.dataService.editSpeech(this.speech).pipe(takeUntil(this.destroyed$))
     .subscribe( (res) => {
